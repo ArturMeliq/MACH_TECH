@@ -1,0 +1,103 @@
+.left_sideBar {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  width: 293px;
+  height: 100%;
+
+  .options {
+    display: flex;
+    width: 100%;
+    height: 56px;
+    justify-content: space-around;
+    align-items: center;
+    border-radius: 10px 0 0 0;
+    background-color: #4698F0;
+
+    .folder_icon {
+      width: 51px;
+      height: 28px;
+      cursor: pointer;
+
+      svg {
+        width: 100%;
+        height: 100%;
+      }
+    }
+
+    .key_icon {
+      width: 51px;
+      height: 24px;
+      cursor: pointer;
+
+
+      svg {
+        width: 100%;
+        height: 100%;
+      }
+    }
+
+    .settings_icon {
+      width: 28px;
+      height: 30px;
+      cursor: pointer;
+
+
+      svg {
+        width: 100%;
+        height: 100%;
+      }
+    }
+
+    .searchSvg_icon {
+      width: 28px;
+      height: 28px;
+      cursor: pointer;
+      margin-right: 7px;
+
+
+      svg {
+        width: 100%;
+        height: 100%;
+      }
+    }
+
+    .showing_icons {
+      width: 229px;
+      height: 39px;
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+    }
+
+    .left_sideBar_input {
+      width: 229px;
+      height: 39px;
+
+      .input_padding {
+        padding: 6px 22px;
+
+        &::placeholder {
+          color: #D6D6D6;
+        }
+      }
+    }
+
+  }
+
+  .logo_block {
+    width: 200px;
+    height: 40px;
+    margin-bottom: 40px;
+    align-self: flex-end;
+
+
+    svg {
+      width: 100%;
+      height: 100%;
+
+    }
+  }
+
+
+}
