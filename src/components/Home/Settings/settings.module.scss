@@ -1,0 +1,54 @@
+
+.settings_folder {
+  position: absolute;
+  right: -10px;
+  width: 228px;
+  height: 175px;
+  z-index: 999;
+
+  .settings_arrow {
+    height: 25px;
+    width: 25px;
+    background-color: white;
+    margin-left: auto;
+    transform: rotate(45deg) translate(5px, 13px);
+    border-left: 1px solid #EDEDED;;
+    border-top: 1px solid #EDEDED;;
+
+
+    .settings_arrow_rotate {
+      //position: absolute;
+      //top: -17px;
+      //left: -16px;
+      //width: 34px;
+      //height: 35px;
+      //background-color: inherit;
+      //transform: rotate(45deg);
+      //border-right: 1px solid white;
+      //z-index: 333;
+    }
+  }
+
+  .settings_folder_content {
+    width: 100%;
+    background-color: white;
+    border: 1px solid rgba(143, 143, 143, 0.25);
+    padding: 10px 10px;
+
+    .settings_folder_content_text {
+      position: relative;
+      padding: 5px;
+      color: #000;
+      font-size: 14px;
+      font-style: normal;
+      font-weight: 400;
+      line-height: normal;
+      border-bottom: 1px solid #F1F1F1;
+      z-index: 3434;
+
+      &:hover {
+        background-color: #E8F0FF;
+      }
+    }
+  }
+}

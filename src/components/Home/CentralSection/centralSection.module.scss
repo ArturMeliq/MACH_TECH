@@ -1,0 +1,176 @@
+.passwords_wrapper {
+  width: 1011px;;
+  height: 100%;
+  background: #FFF;
+  box-shadow: 0 0 25px 0 rgba(0, 0, 0, 0.15);
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+
+    thead {
+      width: 100%;
+      height: 56px;
+      cursor: pointer;
+
+      tr {
+        height: 100%;
+        background-color: #F2F2F2;
+
+        th {
+          height: 100%;
+
+
+          .header_block {
+            height: 100%;
+            display: flex;
+            align-items: center;
+            padding: 0 23px;
+
+            &.padding {
+              justify-content: end;
+            }
+
+
+            .header_text {
+              color: #141414;
+              font-size: 16px;
+              font-style: normal;
+              font-weight: 700;
+              line-height: normal;
+            }
+
+            .header_icon {
+              width: 11px;
+              height: 13px;
+              margin-right: 4px;
+
+              svg {
+                width: 100%;
+                height: 100%;
+              }
+            }
+          }
+        }
+      }
+    }
+
+    tbody {
+      color: #233242;
+
+      tr {
+        border-bottom: 1px solid #F1F1F1;
+        cursor: pointer;
+
+        &:hover {
+          background-color: #E8F0FF;
+        }
+
+        &.active {
+          background-color: #E8F0FF;
+        }
+
+        &:last-child {
+          border: none
+        }
+
+        td {
+          width: 100%;
+          height: 52px;
+          padding: 0 23px;
+
+          .name_block {
+            display: flex;
+            align-items: center;
+
+            .name_block_first_later {
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              width: 30px;
+              height: 30px;
+              border-radius: 50%;
+              background-color: #4698F0;
+              color: white;
+              margin-right: 8px;
+            }
+          }
+
+          .settings {
+            display: flex;
+            width: 100%;
+            align-items: center;
+            justify-content: end;
+
+            .dots_Svg_block {
+              position: relative;
+              margin-right: 15px;
+
+              .settings_icon {
+                height: 18px;
+                width: 10px;
+                cursor: pointer;
+
+                svg {
+                  height: 100%;
+                  width: 4px;
+                }
+
+                &:hover {
+                  transform: scale(1.2);
+                }
+              }
+            }
+
+          }
+
+
+        }
+      }
+
+    }
+  }
+
+  .add_password_button {
+    margin: 5px auto auto auto;
+    width: 95%;
+    height: 54px;
+    border: 2px dashed #AFB0B3;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+
+    &:hover {
+      border: 2px dashed black;
+
+      .add_password_text {
+        color: black;
+      }
+    }
+
+    .add_password_svg {
+      width: 15px;
+      height: 15px;
+      margin-right: 10px;
+
+      svg {
+        width: 100%;
+        height: 100%;
+
+        path {
+          fill: #AFB0B3;
+
+        }
+      }
+    }
+
+    .add_password_text {
+      color: #141414;
+      font-size: 12px;
+      font-style: normal;
+      font-weight: 400;
+      line-height: normal
+    }
+  }
+}

@@ -1,4 +1,5 @@
 import React, { useCallback, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { ReactComponent as SearchSvg } from '../../../assets/icons/SearchSvg.svg';
 import { ReactComponent as KeySvg } from '../../../assets/icons/KeySvg.svg';
 import { ReactComponent as FolderSvg } from '../../../assets/icons/FolderSvg.svg';
@@ -9,15 +10,17 @@ import { ReactComponent as LogoSvg } from '../../../assets/icons/LogoSvg.svg';
 // import { ReactComponent as HistorySvg } from '../../../assets/icons/HistorySvg.svg';
 // import { ReactComponent as CalendarSvg } from '../../../assets/icons/CalendarSvg.svg';
 // import photo1 from '../../../assets/photos/photo_1.png';
-import photo2 from '../../../assets/photos/photo_2.png';
-import photo3 from '../../../assets/photos/photo_3.png';
-import photo4 from '../../../assets/photos/photo_4.png';
-import photo5 from '../../../assets/photos/photo_5.png';
 import classes from './leftSidebar.module.scss';
 import Input from '../../_common/Form/Input/Input';
 // import HistoryPopUp from './HistoryPopUp/HistoryPopUp';
 import AccessesPopUp from './AccessesPopUp/AccessesPopUp';
 import SettingsPopUp from './SettingsPopUp/SettingsPopUp';
+import CreateUpdateFolderPopUp from './CreateUpdateFolderPopUp/CreateUpdateFolderPopUp';
+import RenderFolder from '../../_common/RenderFolder/RenderFolder';
+import { deleteFolder } from '../../../store/actions/Folders';
+import { saveFolderId } from '../../../store/actions/SaveFolderAndPasswordId';
+import DeleteModal from '../DeleteModal/DeleteModal';
+import CreateUpdatePassword from '../CentralSection/CreateUpdatePassword/CreateUpdatePassword';
 
 const LeftSidebar = () => {
   const [showSearch, setSowSearch] = useState(false);
@@ -25,12 +28,23 @@ const LeftSidebar = () => {
   const [showAccesses, setShowAccesses] = useState(false);
   const [showSettings, ToggleSettings] = useState(false);
   const [inputValue, setInputValue] = useState('');
+  const [showCreatingFolder, setCreating] = useState(false);
+  const [showModal, toggleModal] = useState(false);
+  const [currentSettingsId, setCurrentSettingsId] = useState();
+
+  const dispatch = useDispatch();
+
+  const { users, folders, folderPasswordId: { folderId } } = useSelector((state) => state);
 
   const showingSearch = () => {
     setSowSearch((prev) => !prev);
   };
   const handleChange = (val) => {
     setInputValue(val);
+  };
+
+  const createFolder = () => {
+    setCreating((prevState) => !prevState);
   };
 
   // const showingHistory = useCallback(() => {
@@ -44,6 +58,16 @@ const LeftSidebar = () => {
   const showingAccesses = useCallback(() => {
     setShowAccesses((prev) => !prev);
   }, [showAccesses]);
+  const handleSettingId = (id) => {
+    setCurrentSettingsId(id);
+    toggleModal((prevState) => !prevState);
+  };
+
+  const deletedFolder = () => {
+    dispatch(deleteFolder(folderId));
+    dispatch(saveFolderId(''));
+    toggleModal((prevState) => !prevState);
+  };
 
   // // const headerData = useMemo(() => [
   // //   {
@@ -73,91 +97,54 @@ const LeftSidebar = () => {
   // //   },
   // // ], []);
   // //
-  // // const data = useMemo(() => [
-  // //   {
-  // //     id: 1,
-  // //     fullName: 'Фамилия Имя Отчество',
-  // //     photo: photo1,
-  // //     accessRights: 'Редактор',
-  // //     history: 'История',
-  // //     date: '13.07.2023, в 14:03',
-  // //   },
-  // //   {
-  // //     id: 2,
-  // //     fullName: 'Фамилия Имя Отчество',
-  // //     photo: photo1,
-  // //     accessRights: 'Читатель',
-  // //     history: 'История',
-  // //     date: '13.07.2023, в 14:03',
-  // //   },
-  // //
-  // // ], []);
-
-  const accessData = [
-    {
-      id: 1,
-      photo: photo2,
-      fullName: 'Фамилия Имя Отчество 1',
-    },
-    {
-      id: 2,
-      photo: photo3,
-      fullName: 'Фамилия Имя Отчество 2',
-    },
-    {
-      id: 3,
-      photo: photo4,
-      fullName: 'Фамилия Имя Отчество 3',
-    },
-    {
-      id: 4,
-      photo: photo5,
-      fullName: 'Фамилия Имя Отчество 4',
-    },
-  ];
 
   return (
     <div className={classes.left_sideBar}>
-      <div style={{ width: '100%' }}>
-        <div className={classes.options}>
-          {!showSearch
-            ? (
-              <div className={classes.showing_icons}>
-                <div className={classes.folder_icon}>
-                  <FolderSvg />
-                </div>
-                <div className={classes.key_icon} onClick={showingAccesses}>
-                  <KeySvg />
-                </div>
-                <div className={classes.settings_icon} onClick={showingSettings}>
-                  <SettingsSvg />
-                </div>
+      <div className={classes.options}>
+        {!showSearch
+          ? (
+            <div className={classes.showing_icons}>
+              <div className={classes.folder_icon} onClick={createFolder}>
+                <FolderSvg />
               </div>
-            )
-            : (
-              <form onSubmit={(e) => e.preventDefault()}>
-                <Input
-                  onChange={handleChange}
-                  className={classes.left_sideBar_input}
-                  inputClassName={classes.input_padding}
-                  value={inputValue}
-                  placeholder="Поиск"
-                />
-              </form>
+              <div className={classes.key_icon} onClick={showingAccesses}>
+                <KeySvg />
+              </div>
+              <div className={classes.settings_icon} onClick={showingSettings}>
+                <SettingsSvg />
+              </div>
+            </div>
+          )
+          : (
+            <form onSubmit={handleChange}>
+              <Input
+                onChange={handleChange}
+                className={classes.left_sideBar_input}
+                inputClassName={classes.input_padding}
+                value={inputValue}
+                placeholder="Поиск"
+              />
+            </form>
 
-            )}
+          )}
 
-          <div
-            className={classes.searchSvg_icon}
-            onClick={showingSearch}
-          >
-            <SearchSvg />
-          </div>
+        <div
+          className={classes.searchSvg_icon}
+          onClick={showingSearch}
+        >
+          <SearchSvg />
         </div>
       </div>
 
-      <div className={classes.logo_block}>
-        <LogoSvg />
+      <div className={classes.folders_and_logo}>
+        <RenderFolder
+          inputValue={inputValue}
+          handleSettingId={handleSettingId}
+        />
+
+        <div className={classes.logo_block}>
+          <LogoSvg />
+        </div>
       </div>
 
       {/* <HistoryPopUp */}
@@ -168,7 +155,7 @@ const LeftSidebar = () => {
       {/* /> */}
 
       <AccessesPopUp
-        accessData={accessData}
+        accessData={users}
         showAccesses={showAccesses}
         showingAccesses={showingAccesses}
       />
@@ -177,6 +164,49 @@ const LeftSidebar = () => {
         showSettings={showSettings}
         showingSettings={showingSettings}
       />
+
+      <CreateUpdateFolderPopUp
+        showCreatingFolder={showCreatingFolder}
+        onClose={createFolder}
+        title="Создать папку"
+      />
+
+      {(currentSettingsId === 1) && (
+        <DeleteModal
+          onClose={() => toggleModal((prevState) => !prevState)}
+          text="Вы уверены что хотите удалить эту папку?"
+          show={showModal}
+          onConfirm={deletedFolder}
+        />
+      )}
+
+      {(currentSettingsId === 2)
+        && (
+          <CreateUpdateFolderPopUp
+            onClose={() => {
+              toggleModal((prevState) => !prevState);
+            }}
+            fields={{
+              parentId: folderId,
+              section: folders.find((f) => f.id === folderId)?.name,
+            }}
+            showCreatingFolder={showModal}
+            title="Добавить подраздел"
+          />
+        )}
+      {(currentSettingsId === 3)
+        && (
+          <CreateUpdatePassword
+            onClose={() => {
+              toggleModal((prevState) => !prevState);
+            }}
+            fields={{
+              parentId: folderId,
+            }}
+            show={showModal}
+            modalTitle="Добавить пароль"
+          />
+        )}
     </div>
   );
 };

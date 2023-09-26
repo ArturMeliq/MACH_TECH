@@ -1,0 +1,38 @@
+.are_you_sure_block {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+
+  .are_you_sure_text {
+    color: #000;
+    font-size: 25px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+    text-align: center;
+  }
+
+  .delete_buttons_block {
+    height: 56px;
+    width: 100%;
+    display: flex;
+    margin-top: 50px;
+
+
+    .delete_button_yes {
+      margin-right: 10px;
+    }
+
+    .delete_button_cancel {
+      background-color: #627384;
+      border: 1px solid #627384;
+
+      &:hover {
+        background-color: white;
+        color: #627384;
+      }
+    }
+  }
+}

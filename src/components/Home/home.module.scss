@@ -24,8 +24,9 @@
     margin: 45px auto auto auto;
     border-radius: 10px;
     background-color: #FFFFFF;
-
-
+    display: flex;
+    justify-content: start;
+    overflow-x: auto;
   }
 
 }

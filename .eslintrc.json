@@ -120,6 +120,9 @@
     ],
     "jsx-a11y/no-static-element-interactions": [
      0
+    ],
+    "camelcase": [
+      0
     ]
   }
 }
