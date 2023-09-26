@@ -5,29 +5,36 @@
 
       .settings_wrapper {
         width: 100%;
-        height: 100%;
 
-        .field {
+
+        .fields_options {
           width: 100%;
-          padding: 16px 25px;
-          color: #141414;
-          font-size: 12px;
-          font-style: normal;
-          font-weight: 400;
-          line-height: normal;
-          border-bottom: 1px solid #F1F1F1;
-          cursor: pointer;
+          height: 100%;
 
 
-          &:hover {
-            background-color: #E8F0FF;
+          .field {
+            width: 100%;
+            padding: 16px 25px;
+            color: #141414;
+            font-size: 12px;
+            font-style: normal;
+            font-weight: 400;
+            line-height: normal;
+            border-bottom: 1px solid #F1F1F1;
+            cursor: pointer;
+
+
+            &:hover {
+              background-color: #E8F0FF;
+            }
+          }
+
+          .show_options {
+            width: 100%;
           }
         }
 
-        .show_options {
-          display: none;
-          width: 100%;
-        }
+
       }
 
     }

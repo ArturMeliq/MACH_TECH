@@ -14,7 +14,7 @@ const SettingsPopUp = ({
   showingSettings,
 }) => {
   const [hovering, setHovering] = useState(0);
-  const [idFields, setIdFields] = useState('');
+  const [, setIdFields] = useState('');
 
   const fields = [
     {
@@ -41,27 +41,27 @@ const SettingsPopUp = ({
 
   const addUsers = [
     {
-      id: 1,
+      userId: 1,
       fullName: 'Имя Фамилия',
     },
     {
-      id: 2,
+      userId: 2,
       fullName: 'Имя Фамилия',
     },
     {
-      id: 3,
+      userId: 3,
       fullName: 'Имя Фамилия',
     },
     {
-      id: 4,
+      userId: 4,
       fullName: 'Имя Фамилия',
     },
     {
-      id: 5,
+      userId: 5,
       fullName: 'Имя Фамилия',
     },
     {
-      id: 6,
+      userId: 6,
       fullName: 'Имя Фамилия',
     },
   ];
@@ -83,63 +83,71 @@ const SettingsPopUp = ({
         }}
       >
 
-        {fields.map(({ field, id }) => (!idFields || idFields >= id ? (
-          <p
+        {fields.map(({ field, id }) => (
+          <div
             key={field}
-            className={classes.field}
-            onMouseEnter={({ target }) => {
-              setHovering(target.textContent);
-              setIdFields(id);
-            }}
-            onMouseLeave={() => {
-            }}
+            className={classes.fields_options}
           >
-            {field}
-          </p>
-        ) : ''))}
-        <div
-          className={classes.show_options}
-          style={{
-            display:
-              hovering === 'Отредактировать права на корневую папку'
-              || hovering === 'Забирать права' ? 'block' : 'none',
-          }}
-        >
-          <AddingUsersAndChangingPermissions className={classes.margin}>
-            {addUsers.map(({
-              fullName,
-              id,
-            }) => (
-              <div key={id} className={classes.change_users}>
-                <Checkbox SVG={PlusSvg} text={fullName} />
-
-                <MySelectComponent
-                  className={classes.for_select_design}
-                  classNameText={classes.for_select_text_size}
-                  value="Права"
-                />
-              </div>
-            ))}
-          </AddingUsersAndChangingPermissions>
-
-          <div className={classes.btns_block}>
-            <Button
-              className={classes.save}
-              onClick={() => {
+            <p
+              className={classes.field}
+              onMouseEnter={({ target }) => {
+                setHovering(target.textContent);
+                setIdFields(id);
+              }}
+              onMouseLeave={() => {
               }}
             >
-              Сохранить
-            </Button>
+              {field}
+            </p>
 
-            <Button
-              className={classes.cancel_btn}
-              onClick={() => {
-              }}
-            >
-              Отменить
-            </Button>
+            {((field === 'Отредактировать права на корневую папку'
+                  && hovering === 'Отредактировать права на корневую папку')
+                || (field === 'Забирать права' && hovering === 'Забирать права'))
+              && (
+                <div
+                  className={classes.show_options}
+                >
+                  <AddingUsersAndChangingPermissions className={classes.margin}>
+                    {addUsers.map(({
+                      fullName,
+                      userId,
+                    }) => (
+                      <div key={userId} className={classes.change_users}>
+                        <Checkbox SVG={PlusSvg} text={fullName} />
+
+                        <MySelectComponent
+                          className={classes.for_select_design}
+                          classNameText={classes.for_select_text_size}
+                          value="Права"
+                        />
+                      </div>
+                    ))}
+                  </AddingUsersAndChangingPermissions>
+
+                  <div className={classes.btns_block}>
+                    <Button
+                      className={classes.save}
+                      onClick={() => {
+                      }}
+                    >
+                      Сохранить
+                    </Button>
+
+                    <Button
+                      className={classes.cancel_btn}
+                      onClick={() => {
+                      }}
+                    >
+                      Отменить
+                    </Button>
+                  </div>
+                </div>
+              )}
+
           </div>
-        </div>
+
+        ))}
+
       </div>
 
     </Modal>

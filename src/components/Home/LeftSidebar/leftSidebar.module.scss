@@ -3,7 +3,9 @@
   flex-wrap: wrap;
   justify-content: center;
   width: 293px;
+  min-width: 293px;
   height: 100%;
+
 
   .options {
     display: flex;
@@ -85,19 +87,31 @@
 
   }
 
-  .logo_block {
-    width: 200px;
-    height: 40px;
-    margin-bottom: 40px;
-    align-self: flex-end;
+  .folders_and_logo {
+    width: 100%;
+    display: flex;
+    height: calc(100% - 56px);
+    flex-wrap: wrap;
+    justify-content: center;
+    overflow-y: auto;
 
 
-    svg {
-      width: 100%;
-      height: 100%;
 
+    .logo_block {
+      width: 200px;
+      height: 40px;
+      margin-bottom: 40px;
+      margin-top: 15px;
+      align-self: flex-end;
+
+
+      svg {
+        width: 100%;
+        height: 100%;
+
+      }
     }
   }
 
-
 }
+

@@ -28,7 +28,7 @@ const AddingUsersAndChangingPermissions = ({
       )}
 
       <div className={classes.main_content} style={{ height: !title && '100%' }}>
-        <div style={{ padding: '10px 25px' }}>
+        <div style={{ padding: '10px 25px', width: '100%' }}>
           <Input
             value={value}
             onChange={change}
