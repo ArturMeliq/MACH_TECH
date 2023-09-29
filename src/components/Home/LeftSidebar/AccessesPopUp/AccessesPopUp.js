@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import PropTypes from 'prop-types';
+import { useDispatch } from 'react-redux';
 import Modal from '../../../_common/Modal/Modal';
 import { ReactComponent as DeleteSvg } from '../../../../assets/icons/DeleteSvg.svg';
 import { ReactComponent as PlusSvg } from '../../../../assets/icons/PlusSvg.svg';
@@ -9,6 +10,7 @@ import AddingUsersAndChangingPermissions
   from '../../AddingUsersAndChangingPermissions/AddingUsersAndChangingPermissions';
 import Checkbox from '../../../_common/Form/Checkbox/Checkbox';
 import classes from './accessesPopUp.module.scss';
+import { changeUser } from '../../../../store/actions/users';
 
 const options = ['Редактирование', 'Чтение'];
 
@@ -42,21 +44,16 @@ const AccessesPopUp = ({
   showAccesses,
   showingAccesses,
 }) => {
-  const users = [];
-  const [usersOptions, setUsersOptions] = useState(users);
+  const [, setUsersOptions] = useState('');
   const [addingUsers, setAdding] = useState(false);
-
-  const handleChange = (v, id) => {
-    setUsersOptions(
-      (prevState) => prevState.map((value) => {
-        if (+value.id === +id) {
-          value.option = v;
-          return value;
-        }
-        return value;
-      }),
-    );
-  };
+  const dispatch = useDispatch();
+  const handleChange = useCallback((v, id) => {
+    dispatch(changeUser({
+      accessRights: v,
+      id,
+    }));
+    setUsersOptions(v);
+  }, []);
 
   const closeAddingUsers = () => {
     setAdding(false);
@@ -72,32 +69,27 @@ const AccessesPopUp = ({
         id,
         photo,
         fullName,
-      }) => {
-        users.push({
-          id,
-        });
-
-        return (
-          <div key={id} className={classes.items}>
-            <div className={classes.photo_block}>
-              <img src={photo} alt="photo" />
-            </div>
-
-            <p className={classes.ful_name}>{fullName}</p>
-
-            <MySelectComponent
-              value={usersOptions.find((v) => v.id === id)?.option}
-              options={options}
-              onChange={(v) => handleChange(v, id)}
-            />
-
-            <div style={{ minWidth: 55 }}>
-              <DeleteSvg className={classes.delete_svg} />
-            </div>
-
+        accessRights,
+      }) => (
+        <div key={id} className={classes.items}>
+          <div className={classes.photo_block}>
+            <img src={photo} alt="photo" />
           </div>
-        );
-      })}
+
+          <p className={classes.ful_name}>{fullName}</p>
+
+          <MySelectComponent
+            value={accessRights}
+            options={options}
+            onChange={(v) => handleChange(v, id)}
+          />
+
+          <div style={{ minWidth: 55 }}>
+            <DeleteSvg className={classes.delete_svg} />
+          </div>
+
+        </div>
+      ))}
 
       {!addingUsers
         ? (
@@ -141,14 +133,7 @@ const AccessesPopUp = ({
   );
 };
 AccessesPopUp.propTypes = {
-  accessData: PropTypes.arrayOf(PropTypes.shape({
-    id: PropTypes.oneOfType([
-      PropTypes.string,
-      PropTypes.number,
-    ]).isRequired,
-    photo: PropTypes.any.isRequired,
-    fullName: PropTypes.string.isRequired,
-  })).isRequired,
+  accessData: PropTypes.array.isRequired,
   showAccesses: PropTypes.bool.isRequired,
   showingAccesses: PropTypes.func.isRequired,
 };

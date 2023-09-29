@@ -7,10 +7,10 @@ import Modal from '../../../_common/Modal/Modal';
 import Input from '../../../_common/Form/Input/Input';
 import { ReactComponent as CloseSvg } from '../../../../assets/icons/xmark-solid.svg';
 import Button from '../../../_common/Form/Button/Button';
-import RenderFolder from '../../../_common/RenderFolder/RenderFolder';
+import RenderFolder from '../RenderFolder/RenderFolder';
 import colors from '../../../../helpers/staticData/Colors/colors';
 import folders from '../../../../helpers/staticData/Folder/folder';
-import { addFolder } from '../../../../store/actions/Folders';
+import { addFolder } from '../../../../store/actions/folders';
 import classes from './createUpdateFolderPopUp.module.scss';
 
 const CreateUpdateFolderPopUp = ({
@@ -19,13 +19,16 @@ const CreateUpdateFolderPopUp = ({
   title,
   fields,
 }) => {
+  const foldersOfStore = useSelector((states) => states.folders);
+  const folderId = useSelector((states) => states.folderPasswordId.folderId);
+  const dispatch = useDispatch();
   const [searchFolderValue, setSearchFolderValue] = useState('');
 
-  const [showChapter, ToggleChapter] = useState(false);
+  const [showChapter, toggleChapter] = useState(false);
 
   const [allValues, setAllValues] = useState({
     id: fields?.id || '',
-    parentId: fields?.parentId || '',
+    parentId: fields?.parentId || undefined,
     name: fields?.name || '',
     section: fields?.section || '',
     description: fields?.description || '',
@@ -35,18 +38,11 @@ const CreateUpdateFolderPopUp = ({
 
   const [errors, setErrors] = useState({});
 
-  const { folders: foldersOfStore } = useSelector((states) => states);
-  const dispatch = useDispatch();
-
   const showingChapter = () => {
-    ToggleChapter((prevState) => !prevState);
+    toggleChapter((prevState) => !prevState);
   };
 
   const changingValues = (path, v) => {
-    if (path === 'section') {
-      delete allValues.parentId;
-    }
-
     setAllValues((prevState) => ({
       ...prevState,
       [path]: v,
@@ -58,15 +54,15 @@ const CreateUpdateFolderPopUp = ({
     }));
   };
 
-  const onClickFolder = useCallback((id, name) => {
+  const onClickFolder = useCallback((parentId, name) => {
     setAllValues((prevState) => ({
       ...prevState,
-      id,
+      parentId,
       section: name,
     }));
-  }, [setAllValues]);
+  }, [setAllValues, folderId]);
 
-  const selectSection = () => {
+  const selectSection = useCallback(() => {
     setAllValues((prevState) => ({
       ...prevState,
       parentId: fields.id,
@@ -77,20 +73,25 @@ const CreateUpdateFolderPopUp = ({
       section: false,
     }));
 
-    ToggleChapter(false);
-  };
+    toggleChapter(false);
+  }, [allValues, errors, showChapter]);
 
-  const searchingFolder = (v) => {
+  const searchingFolder = useCallback((v) => {
     setSearchFolderValue(v);
-  };
+  }, [searchFolderValue]);
 
   const saveAllFields = () => {
     let errorText = '';
-    _.forEach(allValues, (value, key) => {
-      const checkedValue = !value;
+    const checkedValue = { ...allValues };
+    if (!allValues.section) {
+      checkedValue.parentId = undefined;
+    }
 
-      if (!(key === 'id') && !(key === 'parentId')) {
-        if (checkedValue) {
+    _.forEach(checkedValue, (value, key) => {
+      const isValueEmpty = typeof value === 'string' ? !value.trim() : !value;
+
+      if (key !== 'id' && key !== 'parentId' && key !== 'section') {
+        if (isValueEmpty) {
           errorText = 'Все поля обязательны';
           setErrors((prevState) => ({
             ...prevState,
@@ -101,10 +102,16 @@ const CreateUpdateFolderPopUp = ({
     });
 
     if (!errorText) {
-      dispatch(addFolder({
-        ...allValues,
-        id: Math.max(Math.max(...foldersOfStore.map(({ id: folderId }) => folderId))) + 1,
-      }));
+      const item = _.find(foldersOfStore, (f) => f.id === fields?.id);
+      if (item) {
+        dispatch(addFolder(checkedValue));
+      } else {
+        dispatch(addFolder({
+          ...checkedValue,
+          id: _.max(foldersOfStore.map(({ id }) => id)) + 1,
+        }));
+      }
+
       toast.success('Успешно создано');
       setAllValues({
         id: '',
@@ -120,7 +127,6 @@ const CreateUpdateFolderPopUp = ({
       toast.error(errorText);
     }
   };
-
   const cancelingSaveFolder = () => {
     setAllValues({
       id: '',

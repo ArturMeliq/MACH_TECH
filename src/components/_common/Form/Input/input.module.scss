@@ -29,6 +29,44 @@
       }
     }
 
+    .copy_and_password_svg {
+      position: absolute;
+      right: 0.75rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+
+      .copy_svg {
+        width: 14.308px;
+        height: 18px;
+        margin-right: 5px;
+        cursor: pointer;
+
+
+        svg {
+          width: 100%;
+          height: 100%;
+          fill: rgba(0, 0, 0, 1);
+        }
+      }
+
+      .password_svg {
+        width: 18.148px;
+        height: 14px;
+        cursor: pointer;
+
+        &:hover {
+          transform: scale(1.1);
+        }
+
+        svg {
+          width: 100%;
+          height: 100%;
+          fill: rgba(0, 0, 0, 1);
+        }
+      }
+    }
+
     .search_svg {
       display: flex;
       justify-content: center;
@@ -64,6 +102,10 @@
 
       &.more_padding {
         padding-right: 36px;
+      }
+
+      &.padding_left {
+        padding-left: 55px;
       }
 
       &:focus {

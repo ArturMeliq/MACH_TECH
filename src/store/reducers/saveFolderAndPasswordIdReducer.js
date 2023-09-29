@@ -1,4 +1,4 @@
-import { SAVE_FOLDER_ID_SUCCESS, SAVE_PASSWORD_ID_SUCCESS } from '../actions/SaveFolderAndPasswordId';
+import { SAVE_FOLDER_ID_SUCCESS, SAVE_PASSWORD_ID_SUCCESS } from '../actions/saveFolderAndPasswordId';
 
 const initialState = {
   folderId: '',

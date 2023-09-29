@@ -9,62 +9,60 @@ import MySelectComponent from '../../../_common/Form/MySelectComponent/MySelectC
 import Button from '../../../_common/Form/Button/Button';
 import { ReactComponent as PlusSvg } from '../../../../assets/icons/PlusSvg.svg';
 
+const fields = [
+  {
+    id: 1,
+    field: 'Импорт паролей',
+  },
+  {
+    id: 2,
+    field: 'Экспорт данных в .CSV',
+  },
+  {
+    id: 3,
+    field: 'Получить отчет действий пользователей',
+  },
+  {
+    id: 4,
+    field: 'Отредактировать права на корневую папку',
+  },
+  {
+    id: 5,
+    field: 'Забирать права',
+  },
+];
+
+const addUsers = [
+  {
+    userId: 1,
+    fullName: 'Имя Фамилия',
+  },
+  {
+    userId: 2,
+    fullName: 'Имя Фамилия',
+  },
+  {
+    userId: 3,
+    fullName: 'Имя Фамилия',
+  },
+  {
+    userId: 4,
+    fullName: 'Имя Фамилия',
+  },
+  {
+    userId: 5,
+    fullName: 'Имя Фамилия',
+  },
+  {
+    userId: 6,
+    fullName: 'Имя Фамилия',
+  },
+];
 const SettingsPopUp = ({
   showSettings,
   showingSettings,
 }) => {
   const [hovering, setHovering] = useState(0);
-  const [, setIdFields] = useState('');
-
-  const fields = [
-    {
-      id: 1,
-      field: 'Импорт паролей',
-    },
-    {
-      id: 2,
-      field: 'Экспорт данных в .CSV',
-    },
-    {
-      id: 3,
-      field: 'Получить отчет действий пользователей',
-    },
-    {
-      id: 4,
-      field: 'Отредактировать права на корневую папку',
-    },
-    {
-      id: 5,
-      field: 'Забирать права',
-    },
-  ];
-
-  const addUsers = [
-    {
-      userId: 1,
-      fullName: 'Имя Фамилия',
-    },
-    {
-      userId: 2,
-      fullName: 'Имя Фамилия',
-    },
-    {
-      userId: 3,
-      fullName: 'Имя Фамилия',
-    },
-    {
-      userId: 4,
-      fullName: 'Имя Фамилия',
-    },
-    {
-      userId: 5,
-      fullName: 'Имя Фамилия',
-    },
-    {
-      userId: 6,
-      fullName: 'Имя Фамилия',
-    },
-  ];
 
   return (
     <Modal
@@ -79,11 +77,10 @@ const SettingsPopUp = ({
         className={classes.settings_wrapper}
         onMouseLeave={() => {
           setHovering('');
-          setIdFields('');
         }}
       >
 
-        {fields.map(({ field, id }) => (
+        {fields.map(({ field }) => (
           <div
             key={field}
             className={classes.fields_options}
@@ -92,7 +89,6 @@ const SettingsPopUp = ({
               className={classes.field}
               onMouseEnter={({ target }) => {
                 setHovering(target.textContent);
-                setIdFields(id);
               }}
               onMouseLeave={() => {
               }}
