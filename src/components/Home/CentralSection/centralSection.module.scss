@@ -1,5 +1,6 @@
 .passwords_wrapper {
   width: 1011px;;
+  min-width: 1011px;;
   height: 100%;
   background: #FFF;
   box-shadow: 0 0 25px 0 rgba(0, 0, 0, 0.15);
@@ -49,6 +50,21 @@
                 width: 100%;
                 height: 100%;
               }
+
+              &.star {
+                &:hover {
+                  svg {
+                    fill: #FFCA28;
+
+                  }
+                }
+                &.active {
+                  svg {
+                    fill: #FFCA28;
+                  }
+                }
+              }
+
             }
           }
         }
@@ -124,6 +140,19 @@
 
           }
 
+          .item_star {
+            &:hover {
+              svg {
+                fill: #FFCA28;
+              }
+            }
+
+            &.favorites {
+              svg {
+                fill: #FFCA28;
+              }
+            }
+          }
 
         }
       }

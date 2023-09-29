@@ -1,24 +1,26 @@
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import PropTypes from 'prop-types';
-import { ReactComponent as ShowMoreSvg } from '../../../assets/icons/ShowMoreSvg.svg';
-import { ReactComponent as DotsSvg } from '../../../assets/icons/DotsSvg.svg';
+import { ReactComponent as ShowMoreSvg } from '../../../../assets/icons/ShowMoreSvg.svg';
+import { ReactComponent as DotsSvg } from '../../../../assets/icons/DotsSvg.svg';
 import classes from './renderFolder.module.scss';
-import Settings from '../../Home/Settings/Settings';
-import { saveFolderId, savePasswordId } from '../../../store/actions/SaveFolderAndPasswordId';
+import Settings from '../../Settings/Settings';
+import { saveFolderId, savePasswordId } from '../../../../store/actions/saveFolderAndPasswordId';
 
 const RenderFolder = ({
   inputValue,
   onClick,
   handleSettingId,
 }) => {
-  const [showingFolderId, setShowingFolderId] = useState([]);
-  const [showSettingsFolder, setShowSettingFolder] = useState(false);
-
-  const [currentId, setCurrentId] = useState();
-  const { folders, folderPasswordId: { folderId } } = useSelector((state) => state);
+  const folders = useSelector((state) => state.folders);
+  const folderPasswordId = useSelector((state) => state.folderPasswordId);
   const dispatch = useDispatch();
 
+  const [showingFolderId, setShowingFolderId] = useState([]);
+  const [showSettingsFolder, setShowSettingFolder] = useState(false);
+  const [currentId, setCurrentId] = useState();
+
+  const { folderId } = folderPasswordId;
   const getFolderChildrenId = (pId) => {
     const list = [];
 
@@ -34,6 +36,7 @@ const RenderFolder = ({
 
   const showingSubFolder = (parenId) => {
     let newFolderId = [...showingFolderId];
+    const { name } = folders.find((f) => f.id === parenId);
 
     const i = showingFolderId.indexOf(parenId);
 
@@ -53,13 +56,11 @@ const RenderFolder = ({
         });
     }
 
-    const parentFolder = folders.find(({ id }) => id === parenId);
-
     setShowingFolderId([...newFolderId]);
     setCurrentId(parenId);
     dispatch(saveFolderId(parenId));
     dispatch(savePasswordId(''));
-    onClick(parentFolder.id, parentFolder.name);
+    onClick(parenId, name);
   };
 
   const renderFolder = (idParent) => (

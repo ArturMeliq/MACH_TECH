@@ -1,8 +1,8 @@
 import { combineReducers } from 'redux';
-import folders from './FoldersReducer';
-import users from './UsersReducer';
-import folderPasswordId from './SaveFolderAndPasswordIdReducer';
-import passwords from './PasswordsReducer';
+import folders from './foldersReducer';
+import users from './usersReducer';
+import folderPasswordId from './saveFolderAndPasswordIdReducer';
+import passwords from './passwordsReducer';
 
 const rootReducer = combineReducers({
   folders,

@@ -2,14 +2,7 @@
   width: 100%;
   list-style-type: none;
 
-  .nothing_found_text {
-    padding: 18px 3px 16px 40px;
-    color: #D2D1D2;
-    font-size: 24px;
-    font-style: normal;
-    font-weight: 400;
-    line-height: normal;
-  }
+
 
   .list {
 
@@ -89,4 +82,11 @@
 }
 
 
-
+.nothing_found_text {
+  padding: 18px 3px 16px 40px;
+  color: #D2D1D2;
+  font-size: 24px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+}

@@ -4,7 +4,9 @@ export const DELETE_FOLDER_SUCCESS = 'DELETE_FOLDER_SUCCESS';
 export function addFolder(folder) {
   return {
     type: CREATE_FOLDER_SUCCESS,
-    payload: folder,
+    payload: {
+      folder,
+    },
   };
 }
 
