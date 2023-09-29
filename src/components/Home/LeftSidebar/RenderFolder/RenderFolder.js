@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import PropTypes from 'prop-types';
 import { ReactComponent as ShowMoreSvg } from '../../../../assets/icons/ShowMoreSvg.svg';
@@ -15,48 +15,53 @@ const RenderFolder = ({
   const folders = useSelector((state) => state.folders);
   const folderPasswordId = useSelector((state) => state.folderPasswordId);
   const dispatch = useDispatch();
-
+  const [folderList, setFolderList] = useState(folders);
   const [showingFolderId, setShowingFolderId] = useState([]);
   const [showSettingsFolder, setShowSettingFolder] = useState(false);
   const [currentId, setCurrentId] = useState();
 
   const { folderId } = folderPasswordId;
-  const getFolderChildrenId = (pId) => {
-    const list = [];
 
-    folders.forEach(({
-      parentId,
-      id,
-    }) => {
-      if (parentId === pId) list.push(id);
+  useEffect(() => {
+    if (inputValue.trim()) {
+      const findIds = [];
+      const parents = [];
+
+      folders.forEach((p) => {
+        if (p.name.toLowerCase().includes(inputValue.trim().toLowerCase())) {
+          findIds.push(p.id);
+          getFolderParents(p.id, parents);
+        }
+      });
+
+      setFolderList(folders.filter((f) => [...findIds, ...parents].includes(f.id)));
+      setShowingFolderId(parents);
+    } else {
+      setFolderList(folders);
+      setShowingFolderId([]);
+    }
+  }, [inputValue, folders]);
+
+  const getFolderParents = (fId, parentIds = []) => {
+    folders.forEach(({ id, parentId }) => {
+      if (id === fId && parentId && !parentIds.includes(parentId)) {
+        parentIds.push(parentId);
+        getFolderParents(parentId, parentIds);
+      }
     });
-
-    return list;
   };
 
   const showingSubFolder = (parenId) => {
-    let newFolderId = [...showingFolderId];
     const { name } = folders.find((f) => f.id === parenId);
 
-    const i = showingFolderId.indexOf(parenId);
+    setShowingFolderId((prev) => {
+      if (prev.includes(parenId)) {
+        return prev.filter((p) => p !== parenId);
+      }
 
-    if (i > -1) {
-      getFolderChildrenId(parenId)
-        .forEach((id) => {
-          newFolderId = newFolderId.filter((v) => v !== id);
-        });
+      return [...prev, parenId];
+    });
 
-      newFolderId.splice(i, 1);
-    } else {
-      getFolderChildrenId(parenId)
-        .forEach((id) => {
-          folders.forEach((f) => {
-            if (f.id === id) newFolderId.push(parenId);
-          });
-        });
-    }
-
-    setShowingFolderId([...newFolderId]);
     setCurrentId(parenId);
     dispatch(saveFolderId(parenId));
     dispatch(savePasswordId(''));
@@ -64,83 +69,89 @@ const RenderFolder = ({
   };
 
   const renderFolder = (idParent) => (
-    folders.filter((folder) => folder.parentId === idParent)
-      .filter((folder) => folder.name.toUpperCase()
-        .includes(inputValue.toUpperCase()))
+    folderList.filter((folder) => folder.parentId === idParent)
       .map(({
         id,
         IconFolder,
         colorFolder,
         name,
         parentId,
-      }) => (
+      }) => {
+        const hasChild = folderList.find((f) => f.parentId === id);
 
-        <ul
-          className={classes.folders_wrapper}
-          key={id}
-        >
-          <li
-            className={classes.list}
-            style={{ marginLeft: parentId && 10 }}
+        return (
+
+          <ul
+            className={classes.folders_wrapper}
+            key={id}
           >
-            <div
-              className={`${classes.list_items} 
-              ${(currentId === id) || (folderId === id) ? classes.active : ''}`}
-              onClick={() => {
-                showingSubFolder(id);
-              }}
+            <li
+              className={classes.list}
+              style={{ marginLeft: parentId && 10 }}
             >
+              <div
+                className={`${classes.list_items} 
+              ${(currentId === id)
+                || (folderId === id)
+                || (inputValue.trim() && name.toLowerCase() === inputValue.trim().toLowerCase())
+                  ? classes.active : ''}`}
+                onClick={() => {
+                  showingSubFolder(id);
+                }}
+              >
 
-              {getFolderChildrenId(id).length
-                ? (
-                  <ShowMoreSvg
-                    className={classes.show_more_svg}
-                    style={{ transform: showingFolderId.includes(id) && 'rotate(180deg)' }}
-                  />
-                ) : ''}
+                {hasChild
+                  && (
+                    <ShowMoreSvg
+                      className={classes.show_more_svg}
+                      style={{ transform: showingFolderId.includes(id) && 'rotate(180deg)' }}
+                    />
+                  ) }
 
-              <div className={classes.folder_icon}>
-                <IconFolder fill={colorFolder} />
-              </div>
-
-              <p className={classes.folder_name}>
-                {name}
-              </p>
-
-              <div className={classes.dots_svg_block}>
-
-                <div
-                  className={classes.dots_svg}
-                  onClick={(event) => {
-                    event.stopPropagation();
-                    setCurrentId(id);
-                    setShowSettingFolder((prevState) => !prevState);
-                  }}
-                >
-                  <DotsSvg />
+                <div className={classes.folder_icon}>
+                  <IconFolder fill={colorFolder} />
                 </div>
 
-                {(showSettingsFolder && currentId === id) && (
-                <Settings
-                  onClick={handleSettingId}
-                  showingSetting={setShowSettingFolder}
-                />
-                )}
+                <p className={classes.folder_name}>
+                  {name}
+                </p>
+
+                <div className={classes.dots_svg_block}>
+
+                  <div
+                    className={classes.dots_svg}
+                    onClick={(event) => {
+                      event.stopPropagation();
+                      setCurrentId(id);
+                      setShowSettingFolder((prevState) => !prevState);
+                    }}
+                  >
+                    <DotsSvg />
+                  </div>
+
+                  {(showSettingsFolder && currentId === id) && (
+                    <Settings
+                      onClick={handleSettingId}
+                      showingSetting={setShowSettingFolder}
+                    />
+                  )}
+
+                </div>
 
               </div>
+              {showingFolderId.includes(id) && renderFolder(id)}
+            </li>
+          </ul>
 
-            </div>
-            {showingFolderId.includes(id) && renderFolder(id)}
-          </li>
-        </ul>
-
-      ))
+        );
+      })
   );
 
   return (
     <div style={{ width: '100%' }}>
-      {renderFolder().length ? renderFolder()
-        : <p className={classes.nothing_found_text}>Ничего не найдено</p>}
+      {(!renderFolder().length && folders.length)
+        ? <p className={classes.nothing_found_text}>Ничего не найдено</p>
+        : renderFolder()}
     </div>
 
   );

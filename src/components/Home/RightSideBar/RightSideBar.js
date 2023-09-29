@@ -192,18 +192,26 @@ const RightSideBar = () => {
     navigator.clipboard.writeText(value)
       .then(
         () => {
-          toast.success('Copied successfully');
+          if (!e && !inputRef) {
+            toast.success('Link copied successfully');
+          } else {
+            toast.success('Copied successfully');
+          }
         },
         () => {
           toast.error('Copy failed');
         },
       );
-    e.target.focus();
-    inputRef.current.select();
+    e?.target?.focus();
+    inputRef?.current?.select();
   }
 
   const clickOneIsButton = useCallback((path) => {
     if (path) setCurrentButton(path);
+    if (path === 'Ссылка') {
+      const url = window.location.href;
+      copyToClipboard(null, null, url);
+    }
     setShowModals((prev) => !prev);
   }, [currentButton, showModals]);
 
@@ -342,14 +350,15 @@ const RightSideBar = () => {
                     fields={findFolder}
                   />
                 )
-                : (
-                  <CreateUpdatePassword
-                    show={showModals}
-                    onClose={clickOneIsButton}
-                    fields={findPassword}
-                    modalTitle="Изменить пароль"
-                  />
-                )
+                : currentButton === 'Изменить' && findFolder && findPassword
+                  ? (
+                    <CreateUpdatePassword
+                      show={showModals}
+                      onClose={clickOneIsButton}
+                      fields={findPassword}
+                      modalTitle="Изменить пароль"
+                    />
+                  ) : <div />
           : <div />}
       </div>
     </div>

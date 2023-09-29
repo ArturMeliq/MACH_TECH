@@ -5,6 +5,7 @@ import { ReactComponent as KeySvg } from '../../../assets/icons/KeySvg.svg';
 import { ReactComponent as FolderSvg } from '../../../assets/icons/FolderSvg.svg';
 import { ReactComponent as SettingsSvg } from '../../../assets/icons/SettingsSvg.svg';
 import { ReactComponent as LogoSvg } from '../../../assets/icons/LogoSvg.svg';
+import { ReactComponent as PlusSvg } from '../../../assets/icons/PlusSvg.svg';
 import classes from './leftSidebar.module.scss';
 import Input from '../../_common/Form/Input/Input';
 import AccessesPopUp from './AccessesPopUp/AccessesPopUp';
@@ -111,10 +112,26 @@ const LeftSidebar = () => {
       </div>
 
       <div className={classes.folders_and_logo}>
+        { !!folders.length && (
         <RenderFolder
           inputValue={inputValue}
           handleSettingId={handleSettingId}
         />
+        )}
+
+        {(!folders.length)
+          && (
+            <div
+              className={classes.add_password_button}
+              onClick={() => showingHeaderModals(1)}
+            >
+              <div className={classes.add_password_svg}>
+                <PlusSvg />
+              </div>
+
+              <p className={classes.add_password_text}>Добавить пароль</p>
+            </div>
+          )}
 
         <div className={classes.logo_block}>
           <LogoSvg />
